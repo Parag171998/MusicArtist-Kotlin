@@ -1,5 +1,6 @@
-package com.example.wenesdaytaskkotlin
+package com.example.wenesdaytaskkotlin.Network
 
+import com.example.wenesdaytaskkotlin.Models.ArtistSongs
 import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.Query

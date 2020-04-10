@@ -1,4 +1,4 @@
-package com.example.wenesdaytaskkotlin
+package com.example.wenesdaytaskkotlin.Models
 
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
