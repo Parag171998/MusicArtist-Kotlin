@@ -1,11 +1,11 @@
-package com.example.wenesdaytaskkotlin
+package com.example.wenesdaytaskkotlin.Network
 
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 class ApiClient{
 
-    private var BASE_URL: String? = "https://itunes.apple.com/"
+    private var BASE_URL: String = "https://itunes.apple.com/"
     private var apiClient: ApiClient? = null
     private var retrofit: Retrofit? = null
 
