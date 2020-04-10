@@ -12,7 +12,7 @@ import com.example.wenesdaytaskkotlin.R
 import com.example.wenesdaytaskkotlin.Models.Result
 import kotlinx.android.synthetic.main.custom_grid_layout.view.*
 
-class ArtistAdapter(context: Context?, resultList: List<Result>) : RecyclerView.Adapter<ArtistAdapter.ViewHolder>() {
+class ArtistAdapter(context: Context, resultList: List<Result>) : RecyclerView.Adapter<ArtistAdapter.ViewHolder>() {
 
     var layoutInflater: LayoutInflater
     var resultList: List<Result>

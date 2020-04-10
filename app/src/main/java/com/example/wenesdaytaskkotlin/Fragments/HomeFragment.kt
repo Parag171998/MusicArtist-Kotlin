@@ -1,29 +1,30 @@
 package com.example.wenesdaytaskkotlin.Fragments
 
 import android.os.Bundle
+import android.view.*
+import android.widget.SearchView
+import android.widget.SearchView.OnQueryTextListener
+
 import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import androidx.recyclerview.widget.GridLayoutManager
-import com.example.wenesdaytaskkotlin.*
 import com.example.wenesdaytaskkotlin.Adapters.ArtistAdapter
 import com.example.wenesdaytaskkotlin.Models.ArtistSongs
 import com.example.wenesdaytaskkotlin.Models.Result
-import com.example.wenesdaytaskkotlin.Network.ApiInterface
+import com.example.wenesdaytaskkotlin.Network.ApiClient
+import com.example.wenesdaytaskkotlin.R
+import kotlinx.android.synthetic.main.fragment_home.*
+import kotlinx.android.synthetic.main.fragment_home.view.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
-import java.util.ArrayList
-import kotlinx.android.synthetic.main.fragment_home.*
-import kotlinx.android.synthetic.main.fragment_home.view.*
+import java.util.*
 
 class HomeFragment : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
+
+        setHasOptionsMenu(true)
 
         var view: View = inflater.inflate(R.layout.fragment_home, container, false)
 
@@ -31,26 +32,43 @@ class HomeFragment : Fragment() {
 
         view.recycler_view_homeFragment!!.layoutManager = gridLayoutManager
 
-        retrieveJson("jack+johnson")
+        //changed name retrieveJson to getArtists_Data
+        getArtists_Data("jack+johnson")
 
 
         return view
     }
 
-    fun retrieveJson(artist: String?) {
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
 
-        var retrofit: Retrofit = Retrofit.Builder().baseUrl("https://itunes.apple.com/")
-            .addConverterFactory(GsonConverterFactory.create()).build()
+        inflater.inflate(R.menu.my_menu,menu)
+        var menuItem = menu.findItem(R.id.search_bar)
+        var searchView = menuItem.actionView as SearchView
 
-        var apiInterface: ApiInterface = retrofit.create(
-            ApiInterface::class.java)
+        searchView.queryHint = "Search Artists!"
 
-        val artistSongsCall: Call<ArtistSongs?>? = apiInterface.getArtist(artist,"25")
+        searchView.setOnQueryTextListener(object : OnQueryTextListener{
 
-        /*val artistSongsCall: Call<ArtistSongs> =
-            ApiClient.getInstance().getApi().getArtist(artist, "25")
+            override fun onQueryTextChange(newText: String): Boolean {
+                getArtists_Data(newText)
+                return true
+            }
 
-         */
+            override fun onQueryTextSubmit(query: String): Boolean {
+                // task HERE
+                return true
+            }
+
+        })
+         super.onCreateOptionsMenu(menu, inflater)
+    }
+
+
+    fun getArtists_Data(artist: String) {
+
+        val artistSongsCall: Call<ArtistSongs?>? =
+            ApiClient.getInstance()?.getApi()?.getArtist(artist, "25")
+
 
         artistSongsCall?.enqueue(object : Callback<ArtistSongs?> {
             override fun onResponse(call: Call<ArtistSongs?>, response: Response<ArtistSongs?>) {
@@ -61,7 +79,7 @@ class HomeFragment : Fragment() {
                 resultList.addAll(artistSongs?.results!!)
                 val artistAdapter =
                     ArtistAdapter(
-                        context,
+                        context!!,
                         resultList
                     )
                 recycler_view_homeFragment!!.adapter = artistAdapter
@@ -73,3 +91,4 @@ class HomeFragment : Fragment() {
     }
 
 }
+
